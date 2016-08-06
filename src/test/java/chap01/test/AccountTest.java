@@ -8,6 +8,8 @@ import chap01.main.Account;
 
 public class AccountTest {
 
+	private Account account;
+
 	/**
 	 * 아래의 테스트시나리오의 내용은 '계좌를 생성한다. 
 	 * 그때 특별한 에러는 없어야 한다' 이다. 단 계좌를 생성 할때 초기 입금액이
@@ -15,12 +17,16 @@ public class AccountTest {
 	 */
 	@Test
 	public void testAccount() throws Exception {
-		Account account = new Account(10000);
+		setup();
+	}
+
+	private void setup() {
+		account = new Account(10000);
 	}
 
 	@Test
 	public void testGetBalance() throws Exception {
-		Account account = new Account(10000);
+		setup();
 		assertEquals("10000원으로 계좌 생성 후 잔고 조회", 10000, account.getBalance());
 
 		account = new Account(1000);
@@ -29,15 +35,20 @@ public class AccountTest {
 		account = new Account(0);
 		assertEquals("0원으로 계좌 생성 후 잔고 조회", 0, account.getBalance());
 	}
+	
+	@Test
+	public void testDeposit() throws Exception {
+		setup();
+		account.deposit(1000);
 
-	public static void main(String[] args) {
-		AccountTest test = new AccountTest();
-		try {
-			test.testAccount();
-		} catch (Exception e) {
-			System.out.println("실패(X)");
-			return;
-		}
-		System.out.println("성공(O)");
+		assertEquals(11000, account.getBalance());
 	}
+
+	@Test
+	public void testWithdraw() throws Exception {
+		setup();
+		account.withdraw(1000);
+		assertEquals(9000, account.getBalance());
+	}
+
 }
